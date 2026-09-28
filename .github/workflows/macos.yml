@@ -1,0 +1,37 @@
+name: macOS build and checks
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ['macos/**', 'assets/duo.png', '.github/workflows/macos.yml']
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: macos-15
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build universal app and run model checks
+        run: bash macos/build.sh
+      - name: Check Apple Silicon UI rendering
+        run: '"dist/Pocket Companion.app/Contents/MacOS/PocketCompanion" --smoke-test'
+      - uses: actions/upload-artifact@v4
+        with:
+          name: macOS-universal
+          path: |
+            dist/PocketCompanion-macOS-universal-v0.2.0.zip
+            macos-preview.png
+  intel-check:
+    needs: build
+    runs-on: macos-15-intel
+    timeout-minutes: 10
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: macOS-universal
+      - run: ditto -x -k dist/PocketCompanion-macOS-universal-v0.2.0.zip unpacked
+      - name: Check Intel model and UI rendering
+        run: |
+          "unpacked/Pocket Companion.app/Contents/MacOS/PocketCompanion" --self-test
+          "unpacked/Pocket Companion.app/Contents/MacOS/PocketCompanion" --smoke-test

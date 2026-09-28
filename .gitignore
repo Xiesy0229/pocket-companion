@@ -1,0 +1,6 @@
+/dist/
+*.tmp
+error.txt
+settings.xml
+test-results.txt
+.vs/
