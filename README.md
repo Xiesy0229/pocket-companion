@@ -4,6 +4,50 @@
 
 <img src="assets/duo.png" alt="口袋搭子人物与大嘴吉" width="280">
 
+## 为什么是 Sakuya 和大嘴吉？
+
+这个小项目来自我的追星兴趣。主角是 **NCT WISH 的日本成员 SAKUYA（サクヤ，咲哉，也被我叫作撒库亚）**。因为常看到大家把他和大嘴吉联系起来，我也觉得这个联想很可爱，就把他们放在一起，做成桌面上的一对小搭子。这是我的粉丝创作设定，不是官方联名。
+
+人物保留照片贴纸的感觉，配色从照片里的黄绿色上衣、浅蓝色字样出发。大嘴吉（Kuchipatchi）是右下角的小伙伴：本体保持干净的卡通轮廓，外圈与星星使用蜡笔笔触。点击人物会显示日语文字，拖一块小饼干过去就能喂大嘴吉。
+
+如果这个桌宠让你觉得他很可爱，也欢迎去看看 NCT WISH 的舞台与作品 💚
+
+- [NCT 日本官方网站：新闻、音乐与活动](https://nct-jp.net/)
+- [NCTzen WISH-JAPAN 官方粉丝俱乐部](https://nctzenwish-japan.smtown-fc.jp/)
+- [SAKUYA 的官方 Weverse 个人页](https://weverse.io/nctwish/profile/56a51c1fec3deae8d2de1697c66db704?hl=ja)
+- [大嘴吉的官方角色介绍](https://tamagotchi-official.com/us/character/2/)
+
+## 从一个念头，改到现在的样子
+
+一开始，我只是想做一个能陪在桌面上的小角色，后来才逐渐确定为 Sakuya 与大嘴吉的组合。这个过程里，我负责提出需求、挑选照片和视觉参考、判断效果并不断反馈；AI 辅助生成和调整素材，Codex 协助编写程序、排查问题、构建与发布。不是一次生成就定稿，而是一轮轮看效果、试操作，再决定下一步。
+
+| 尝试 | 看效果后的判断 | 后来的调整 |
+| --- | --- | --- |
+| 像素人物、卡通化头像 | 想保留照片人物的辨识度 | 转向真人照片贴纸 |
+| 真人大头加卡通身体 | 头身衔接和比例不够自然 | 尝试只保留头像，以及照片完整人物 |
+| 食物外壳、复古大头贴、Y2K 相框、按键挂件 | 装饰很有趣，但食物衔接和键帽造型还不满意 | 收敛到透明背景的人物贴纸 |
+| 像素描边、猫耳朵和星星 | 逐渐找到喜欢的贴纸感 | 最终换用 Sakuya 的整个人物照片，并按服装配色 |
+| 加入大嘴吉 | 把粉丝眼中的相似感做成角色搭配 | 放在人物右下方，承接喂食互动 |
+| 像素边框改蜡笔边框 | 更喜欢随手画出来的感觉 | 外圈和星星手绘化，大嘴吉本体恢复平滑卡通风 |
+| 第一版桌面试玩 | 尺寸偏大，希望人物说日语 | 默认缩到原来的一半，换成可编辑的日语短句 |
+| Windows 版完成后 | 希望 Mac 用户也能玩 | 补写 Swift / AppKit 版本，打包 Apple Silicon 与 Intel 通用应用 |
+
+## 参考了什么？
+
+视觉参考来自我收集的照片大头贴、复古 Y2K 涂鸦、像素弹窗、食物头像框和照片键帽挂件。参考的重点是照片与装饰如何搭配、边框的质感、缩到桌面尺寸后是否仍然清楚，最终没有直接套用那些整张相框。
+
+桌宠形态也参考了 [Shimeji-Desktop](https://github.com/DalekCraft2/Shimeji-Desktop) 与 [desktopPet / eSheep](https://github.com/Adrianotiger/desktopPet) 这些项目。这两个链接作为探索桌面陪伴类产品的参考；当前程序采用独立的 C# 与 Swift 实现，未把它们作为运行依赖。
+
+## 它是怎么做出来的？
+
+1. **先确定素材。** 根据选中的照片制作透明背景组合图，逐轮调整人物、描边、星星和大嘴吉的画风。素材经过 AI 辅助生成与编辑，并非保证原始照片像素完全不变的纯抠图。
+2. **先做小而完整的互动。** 第一版落实点击回应、拖动与位置记忆、拖饼干喂食，以及右键修改短句和大小。没有把最初想过的所有养成功能一次性塞进去。
+3. **Windows 使用 C# / WinForms。** 通过带透明通道的分层窗口绘制贴图，用鼠标事件区分点击、拖动和喂食，以定时更新实现弹跳、嘴部开合和碎屑效果。
+4. **macOS 使用 Swift / AppKit。** 用原生透明窗口实现同一套互动；加入菜单栏入口、透明区域鼠标穿透判断和本地设置保存，编译成 Apple Silicon 与 Intel 通用应用。
+5. **分别验证再发布。** Windows 完成编译与自检；Mac 通过 GitHub Actions 在两种芯片环境中检查喂食判定、日语短句轮换、设置读写、素材透明度和窗口渲染。桌面交互体验仍可以继续根据真实使用反馈改进。
+
+目前照片人物与大嘴吉共用一张贴图，移动和弹跳也是一起的；吃饼干是嘴部与碎屑叠加动画。人物没有骨骼动画，也没有接入 AI 对话或声音。这些是首版的实际范围。
+
 ## 下载与运行
 
 在仓库的 **Releases** 页面下载 `PocketCompanion-windows-v0.1.0.zip`，完整解压后双击 `StickerDuo.exe`。程序和 `duo.png` 必须位于同一文件夹，无需安装。
@@ -12,7 +56,7 @@
 
 ### macOS
 
-macOS 12 或以上，Apple Silicon（M 系列）与 Intel 共用一个通用应用包。Mac 版采用 Swift / AppKit 实现，不运行 Windows EXE。下载 Releases 中的 `PocketCompanion-macOS-universal-v0.2.0.zip`，解压后将 `Pocket Companion.app` 拖入“应用程序”并打开。构建进度见仓库 Actions 页面。
+macOS 12 或以上，Apple Silicon（M 系列）与 Intel 共用一个通用应用包。Mac 版采用 Swift / AppKit 实现，不运行 Windows EXE。下载 Releases 中的 `PocketCompanion-macOS-universal-v0.2.0.zip`，解压后将 `Pocket Companion.app` 拖入“应用程序”并打开。Apple Silicon 和 Intel 构建检查均已通过，可在仓库 Actions 页面查看记录。
 
 保留照片素材、透明窗口、日语文字、喂食、拖动、大小调整、短句编辑和位置保存。Mac 顶部菜单栏的饼干图标可找回隐藏的桌宠，Control 点击或右键打开菜单。设置保存在 `~/Library/Application Support/PocketCompanion/settings.json`。
 
