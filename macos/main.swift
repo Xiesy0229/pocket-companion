@@ -199,7 +199,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         petWindow.level = .floating; petWindow.collectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary]
         petWindow.isReleasedWhenClosed = false; petWindow.contentView = pet
         let screen = NSScreen.main?.visibleFrame ?? NSRect(x: 0, y: 0, width: 1200, height: 800)
-        petWindow.setFrameOrigin(NSPoint(x: model.preferences.x ?? screen.maxX - pet.frame.width - 20, y: model.preferences.y ?? screen.minY + 20))
+        let initialX: CGFloat = model.preferences.x.map { CGFloat($0) } ?? (screen.maxX - pet.frame.width - 20)
+        let initialY: CGFloat = model.preferences.y.map { CGFloat($0) } ?? (screen.minY + 20)
+        petWindow.setFrameOrigin(NSPoint(x: initialX, y: initialY))
         pet.clamp()
         pet.onSave = { [weak self] in self?.save() }
         pet.onMenu = { [weak self] event in guard let self = self else { return }; NSMenu.popUpContextMenu(self.makeMenu(), with: event, for: self.pet) }
